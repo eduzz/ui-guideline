@@ -1,4 +1,4 @@
-Projeto Base React Eduzz
+eduzz-front-guideline
 ========================
 
 Utilize o VSCode, já está configurado com sugestão de extensões.
