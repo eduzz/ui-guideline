@@ -1,11 +1,10 @@
-import AppRouterProtected from 'components/Router/RouterProtected';
 import { History, Location } from 'history';
 import { IAppRoute } from 'interfaces/route';
 import * as React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import * as rxjs from 'rxjs';
-import rxjsOperators from 'rxjs-operators';
+import { sampleTime } from 'rxjs/operators';
 
 // tslint:disable:jsx-no-lambda
 
@@ -13,7 +12,7 @@ interface IProps {
   routes: IAppRoute[];
 }
 
-export const RouterContext = React.createContext<() => AppRouter>(null);
+export const RouterContext = React.createContext<AppRouter>(null);
 
 export default class AppRouter extends React.PureComponent<IProps> {
 
@@ -41,14 +40,14 @@ export default class AppRouter extends React.PureComponent<IProps> {
     this.listenUnregister && this.listenUnregister();
   }
 
-  previousPage = () => {
-    this.history.goBack();
-  }
-
   observeChange = () => {
     return this.location$.asObservable().pipe(
-      rxjsOperators.sampleTime(500)
+      sampleTime(500)
     );
+  }
+
+  previousPage = () => {
+    this.history.goBack();
   }
 
   reload = (): void => {
@@ -75,13 +74,15 @@ export default class AppRouter extends React.PureComponent<IProps> {
     const { routes } = this.props;
 
     return (
-      <BrowserRouter ref={ref => this.browserRouter = ref as any}>
-        <Switch>
-          {routes.map(router => this.renderRoute(router))}
-          <Route path='/reload' exact render={() => <div />} />
-          <Route render={() => <Redirect to='/' />} />
-        </Switch>
-      </BrowserRouter>
+      <RouterContext.Provider value={this}>
+        <BrowserRouter ref={ref => this.browserRouter = ref as any}>
+          <Switch>
+            {routes.map(router => this.renderRoute(router))}
+            <Route path='/reload' exact render={() => <div />} />
+            <Route render={() => <Redirect to='/' />} />
+          </Switch>
+        </BrowserRouter>
+      </RouterContext.Provider>
     );
   }
 
@@ -95,19 +96,13 @@ export default class AppRouter extends React.PureComponent<IProps> {
         key={route.path}
         exact={route.exact}
         path={path}
-        render={props => route.allowAnonymous ?
+        render={props =>
           <route.component {...props}>
             <Switch>
               {(route.component.routes || []).map(child => this.renderRoute(child, path))}
               <Route render={() => <Redirect to='/' />} />
             </Switch>
-          </route.component> :
-          <AppRouterProtected route={route} routeProps={props}>
-            <Switch>
-              {(route.component.routes || []).map(child => this.renderRoute(child, path))}
-              <Route render={() => <Redirect to='/' />} />
-            </Switch>
-          </AppRouterProtected>
+          </route.component>
         }
       />
     );

@@ -4,8 +4,7 @@ import 'fieldConfig';
 import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
 import { createGenerateClassName } from '@material-ui/core/styles';
 import { theme } from 'assets/theme';
-import Dialogs from 'components/Dialogs';
-import AppRouter, { RouterContext } from 'components/Router';
+import AppRouter from 'components/Router';
 import Alert from 'components/Shared/Alert';
 import Snackbar from 'components/Shared/Snackbar';
 import React from 'react';
@@ -32,14 +31,11 @@ class App extends React.PureComponent {
       <JssProvider generateClassName={generateClassName}>
         <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          <Dialogs />
 
           <Alert.Global />
           <Snackbar.Global />
 
-          <RouterContext.Provider value={this.getRouter}>
-            <AppRouter routes={baseRoutes} ref={ref => this.router = ref} />
-          </RouterContext.Provider>
+          <AppRouter routes={baseRoutes} ref={ref => this.router = ref} />
         </MuiThemeProvider>
       </JssProvider>
     );

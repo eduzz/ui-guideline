@@ -3,25 +3,21 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 import logoWhite from 'assets/images/logo-white.png';
 import AppRouter, { RouterContext } from 'components/Router';
 import { WithStyles } from 'decorators/withStyles';
-import { DeepReadonly } from 'helpers/immutable';
 import { IAppRoute } from 'interfaces/route';
-import { IUserToken } from 'interfaces/userToken';
 import React, { PureComponent } from 'react';
-import rxjsOperators from 'rxjs-operators';
-import authService from 'services/auth';
 
 import DrawerListItem from './ListItem';
 import { IAppRouteParsed, routeParser } from './routeParser';
-import AppDrawerUser from './UserMenu';
 
 interface IState {
-  user?: DeepReadonly<IUserToken>;
   routes: IAppRouteParsed[];
 }
 
 interface IProps {
   routes: IAppRoute[];
   classes?: any;
+  router?: AppRouter;
+  drawer?: IDrawerContext;
 }
 
 export interface IDrawerContext {
@@ -51,10 +47,7 @@ export const DrawerContext = React.createContext<IDrawerContext>(null);
     padding: 0
   }
 }))
-export default class AppDrawer extends PureComponent<IProps, IState> {
-  getRouter: () => AppRouter;
-  drawer: IDrawerContext;
-
+class AppDrawer extends PureComponent<IProps, IState> {
   constructor(props: any) {
     super(props);
     this.state = { routes: [] };
@@ -67,43 +60,37 @@ export default class AppDrawer extends PureComponent<IProps, IState> {
     };
   }
 
-  componentDidMount() {
-    authService.getUser().pipe(
-      rxjsOperators.logError(),
-      rxjsOperators.bindComponent(this)
-    ).subscribe(user => this.setState({ user }));
-  }
-
   toRoute = (route: IAppRoute) => {
-    this.drawer.close();
-    this.getRouter().navigate(route.path);
+    this.props.drawer.close();
+    this.props.router.navigate(route.path);
   }
 
   render() {
-    const { routes, user } = this.state;
+    const { routes } = this.state;
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
-        <RouterContext.Consumer>
-          {getRouter => (this.getRouter = getRouter) && null}
-        </RouterContext.Consumer>
-
-        <DrawerContext.Consumer>
-          {drawer => (this.drawer = drawer) && null}
-        </DrawerContext.Consumer>
-
         <div className={classes.header}>
           <img src={logoWhite} className={classes.logo} />
-          <AppDrawerUser user={user} />
         </div>
 
         <List className={classes.list}>
           {routes.map(route =>
-            <DrawerListItem key={route.path} user={user} route={route} onClick={this.toRoute} />
+            <DrawerListItem key={route.path} route={route} onClick={this.toRoute} />
           )}
         </List>
       </div>
     );
   }
 }
+
+export default React.forwardRef((props: IProps, ref: any) => (
+  <RouterContext.Consumer>
+    {router =>
+      <DrawerContext.Consumer>
+        {drawer => <AppDrawer {...props} ref={ref} router={router} drawer={drawer} />}
+      </DrawerContext.Consumer>
+    }
+  </RouterContext.Consumer>
+));

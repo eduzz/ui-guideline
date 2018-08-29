@@ -1,24 +1,29 @@
 import { IAppRoute } from 'interfaces/route';
-import * as React from 'react';
+import HomeIcon from 'mdi-react/HomeIcon';
+import React, { PureComponent } from 'react';
 
-import AdminModule from './Admin';
-import NewPasswordPage from './Public/NewPassword';
+import AppWrapper from '../Layout/AppWrapper';
+import HomePage from './Home';
 
-export default class Pages extends React.PureComponent {
+export default class Pages extends PureComponent {
   public static routes: IAppRoute[] = [
     {
-      path: '/nova-senha',
-      exact: true,
-      allowAnonymous: true,
-      component: NewPasswordPage
-    },
-    {
       path: '/',
-      component: AdminModule
-    },
+      exact: true,
+      component: HomePage,
+      sideDrawer: {
+        icon: HomeIcon,
+        display: 'Inicio',
+        order: 0
+      }
+    }
   ];
 
   render() {
-    return this.props.children;
+    return (
+      <AppWrapper routes={Pages.routes}>
+        {this.props.children}
+      </AppWrapper>
+    );
   }
 }

@@ -10,12 +10,9 @@ import {
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import AppRouter, { RouterContext } from 'components/Router';
 import { WithStyles } from 'decorators/withStyles';
-import { DeepReadonly } from 'helpers/immutable';
 import { IAppRoute } from 'interfaces/route';
-import { IUserToken } from 'interfaces/userToken';
 import ExpandMoreIcon from 'mdi-react/ExpandMoreIcon';
 import React, { Fragment, PureComponent } from 'react';
-import rxjsOperators from 'rxjs-operators';
 
 import { IAppRouteParsed } from './routeParser';
 
@@ -25,10 +22,10 @@ interface IState {
 }
 
 interface IProps {
-  user: DeepReadonly<IUserToken>;
   route: IAppRouteParsed;
   onClick: (route: IAppRoute) => void;
   classes?: any;
+  router?: AppRouter;
 }
 
 @WithStyles(theme => ({
@@ -73,21 +70,15 @@ interface IProps {
     }
   }
 }))
-export default class DrawerListItem extends PureComponent<IProps, IState> {
-  getRouter: () => AppRouter;
-
+class DrawerListItem extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = { expanded: false, active: false };
   }
 
   componentDidMount() {
-    this.getRouter().observeChange().pipe(
-      rxjsOperators.logError(),
-      rxjsOperators.bindComponent(this)
-    ).subscribe(location => {
+    this.props.router.observeChange().subscribe(location => {
       const { route } = this.props;
-
       const active = route.exact ?
         location.pathname === route.path :
         location.pathname.startsWith(route.path);
@@ -108,31 +99,15 @@ export default class DrawerListItem extends PureComponent<IProps, IState> {
     this.setState({ expanded });
   }
 
-  canAccess = () => {
-    const { route, user } = this.props;
-
-    if (route.allowAnonymous) return true;
-    if (!user) return false;
-    if (!route.roles) return true;
-
-    return user.canAccess(...route.roles);
-  }
-
   render() {
     const { route } = this.props;
 
     return (
       <Fragment>
-        <RouterContext.Consumer>
-          {getRouter => (this.getRouter = getRouter) && null}
-        </RouterContext.Consumer>
-
         {
-          this.canAccess() && (
-            !route.subRoutes.length ?
-              this.renderSingle() :
-              this.renderList()
-          )
+          !route.subRoutes.length ?
+            this.renderSingle() :
+            this.renderList()
         }
       </Fragment>
     );
@@ -161,7 +136,7 @@ export default class DrawerListItem extends PureComponent<IProps, IState> {
 
   renderList = (): React.ReactNode => {
     const { expanded } = this.state;
-    const { route, classes, user } = this.props;
+    const { route, classes } = this.props;
 
     return (
       <ExpansionPanel
@@ -180,7 +155,7 @@ export default class DrawerListItem extends PureComponent<IProps, IState> {
         <ExpansionPanelDetails className={classes.expandableDetails}>
           <List className={classes.innerList}>
             {route.subRoutes.map(sub =>
-              <DrawerListItem key={sub.path} user={user} route={sub} onClick={this.handleSubClick} />
+              <DrawerListItem key={sub.path} route={sub} onClick={this.handleSubClick} />
             )}
           </List>
         </ExpansionPanelDetails>
@@ -188,3 +163,9 @@ export default class DrawerListItem extends PureComponent<IProps, IState> {
     );
   }
 }
+
+export default React.forwardRef((props: IProps, ref: any) => (
+  <RouterContext.Consumer>
+    {router => <DrawerListItem {...props} ref={ref} router={router} />}
+  </RouterContext.Consumer>
+));
