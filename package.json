@@ -1,11 +1,12 @@
 {
   "name": "eduzz-front-guideline",
   "description": "Front Base for React Admin",
+  "homepage": "https://eduzz.github.io/ui-guideline",
   "version": "0.0.1",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "%PROJECT-REPO%"
+    "url": "https://github.com/eduzz/ui-guideline"
   },
   "scripts": {
     "start": "react-scripts-ts start",
