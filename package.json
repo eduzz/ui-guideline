@@ -10,7 +10,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "dev": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
+    "build": "react-scripts-ts build && rm -rf docs && mv build docs",
     "eject": "react-scripts-ts eject",
     "webpack-analyze": "node ./scripts/webpack-analyze.js",
     "update-base": "git pull seed master && git merge seed/master --no-commit --no-ff && yarn rimraf ./init.js"
