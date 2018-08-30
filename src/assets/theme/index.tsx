@@ -4,17 +4,17 @@ import overrides from './overrides';
 import variables from './variables';
 
 const primary = {
-  light: '#6d6d6d',
-  main: '#424242',
-  dark: '#1b1b1b',
+  light: '#3a5885',
+  main: '#002f58',
+  dark: '#00042f',
   contrastText: '#fff',
 };
 
 const secondary = {
-  light: '#4ec485',
-  main: '#009358',
-  dark: '#00642e',
-  contrastText: '#fff',
+  light: '#ffff53',
+  main: '#ffcc09',
+  dark: '#c79c00',
+  contrastText: '#000',
 };
 
 export const theme = createMuiTheme({

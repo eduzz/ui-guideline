@@ -1,6 +1,6 @@
 import { List } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles/colorManipulator';
-import logoWhite from 'assets/images/logo-white.png';
+import logo from 'assets/images/logo.png';
 import AppRouter, { RouterContext } from 'components/Router';
 import { WithStyles } from 'decorators/withStyles';
 import { IAppRoute } from 'interfaces/route';
@@ -72,7 +72,7 @@ class AppDrawer extends PureComponent<IProps, IState> {
     return (
       <div className={classes.root}>
         <div className={classes.header}>
-          <img src={logoWhite} className={classes.logo} />
+          <img src={logo} className={classes.logo} />
         </div>
 
         <List className={classes.list}>

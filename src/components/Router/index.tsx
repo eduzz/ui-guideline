@@ -75,7 +75,7 @@ export default class AppRouter extends React.PureComponent<IProps> {
 
     return (
       <RouterContext.Provider value={this}>
-        <BrowserRouter ref={ref => this.browserRouter = ref as any}>
+        <BrowserRouter basename='/ui-guideline' ref={ref => this.browserRouter = ref as any}>
           <Switch>
             {routes.map(router => this.renderRoute(router))}
             <Route path='/reload' exact render={() => <div />} />
