@@ -6,6 +6,8 @@ export default class Test extends PureComponent {
     return (
       <Fragment>
         <Toolbar title='Teste' />
+
+        <p>Conteudo</p>
       </Fragment>
     );
   }
