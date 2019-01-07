@@ -1,5 +1,5 @@
 import Test from '!raw-loader!./Examples/Test';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import Toolbar from 'components/Layout/Toolbar';
 import Code from 'components/Shared/Code';
 import React, { Fragment, PureComponent } from 'react';

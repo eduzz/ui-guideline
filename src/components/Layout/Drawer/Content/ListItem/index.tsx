@@ -22,7 +22,6 @@ interface IProps {
   data: IMenu;
   onClick: (menu: IMenu) => void;
   classes?: any;
-  router?: AppRouter;
 }
 
 @WithStyles(theme => ({
