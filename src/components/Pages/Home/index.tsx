@@ -10,7 +10,7 @@ export default class HomePage extends PureComponent {
       <Fragment>
         <Toolbar title='Inicio' />
 
-        <Typography variant='subheading'>Teste de editor</Typography>
+        <Typography variant='subtitle1'>Teste de editor</Typography>
         <Typography>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Etiam vestibulum dui velit, quis tempus felis placerat ac.

@@ -4,7 +4,7 @@ import { enRoles } from 'interfaces/models/user';
 import AccountMultipleIcon from 'mdi-react/AccountMultipleIcon';
 import ViewDashboardIcon from 'mdi-react/ViewDashboardIcon';
 import React, { PureComponent } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import HomePage from './Home';
 
@@ -47,18 +47,20 @@ export default class Pages extends PureComponent<IProps, {}> {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>
-        <ScrollTopContext.Provider value={this.scrollTop}>
-          <Drawer menu={this.menu}>
-            <main ref={this.mainContent} className={classes.content}>
-              <Switch>
-                <Route path='/' component={HomePage} />
-                <Route render={() => <Redirect to='/' />} />
-              </Switch>
-            </main>
-          </Drawer>
-        </ScrollTopContext.Provider>
-      </div>
+      <BrowserRouter>
+        <div className={classes.root}>
+          <ScrollTopContext.Provider value={this.scrollTop}>
+            <Drawer menu={this.menu}>
+              <main ref={this.mainContent} className={classes.content}>
+                <Switch>
+                  <Route path='/' exact component={HomePage} />
+                  <Route render={() => <Redirect to='/' />} />
+                </Switch>
+              </main>
+            </Drawer>
+          </ScrollTopContext.Provider>
+        </div>
+      </BrowserRouter>
     );
   }
 }

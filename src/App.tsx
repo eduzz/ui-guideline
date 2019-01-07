@@ -19,7 +19,7 @@ const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true
 });
 
-class App extends React.PureComponent {
+export default class App extends React.PureComponent {
   formFieldConfig = {
     masks: commonMasks,
     dateLocale: locale,
@@ -48,5 +48,3 @@ class App extends React.PureComponent {
     );
   }
 }
-
-export default App;
