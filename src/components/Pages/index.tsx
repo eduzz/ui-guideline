@@ -1,29 +1,22 @@
-import { IAppRoute } from 'interfaces/route';
-import HomeIcon from 'mdi-react/HomeIcon';
+import PermissionRoute from 'components/Shared/PermissionRoute';
 import React, { PureComponent } from 'react';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import AppWrapper from '../Layout/AppWrapper';
-import HomePage from './Home';
+import AdminPage from './Admin';
+import NewPasswordPage from './Public/NewPassword';
 
 export default class Pages extends PureComponent {
-  public static routes: IAppRoute[] = [
-    {
-      path: '/',
-      exact: true,
-      component: HomePage,
-      sideDrawer: {
-        icon: HomeIcon,
-        display: 'Inicio',
-        order: 0
-      }
-    }
-  ];
-
   render() {
     return (
-      <AppWrapper routes={Pages.routes}>
-        {this.props.children}
-      </AppWrapper>
+      <BrowserRouter>
+        <Switch>
+          <Route path='/nova-senha' exact component={NewPasswordPage} />
+          <PermissionRoute path='/' component={AdminPage} />
+
+          <Route path='/reload' exact render={() => <div />} />
+          <Route render={() => <Redirect to='/' />} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }

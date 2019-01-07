@@ -14,19 +14,21 @@ const secondary = {
   light: '#ffff53',
   main: '#ffcc09',
   dark: '#c79c00',
-  contrastText: '#000',
+  contrastText: '#fff',
 };
 
 export const theme = createMuiTheme({
   palette: { primary, secondary },
-  variables,
-  overrides
+  typography: { useNextVariants: true },
+  overrides,
+  variables
 });
 
 export const reverseTheme = createMuiTheme({
   palette: { primary: secondary, secondary: primary },
-  variables,
-  overrides
+  typography: { useNextVariants: true },
+  overrides,
+  variables
 });
 
 export const whiteTheme = createMuiTheme({
@@ -35,7 +37,7 @@ export const whiteTheme = createMuiTheme({
       light: '#ffffff',
       main: '#ffffff',
       dark: '#cccccc',
-      contrastText: '##596375'
+      contrastText: '#3a3a3a'
     },
     secondary: {
       light: '#4ec485',
@@ -44,6 +46,7 @@ export const whiteTheme = createMuiTheme({
       contrastText: '#fff',
     }
   },
-  variables,
-  overrides
+  typography: { useNextVariants: true },
+  overrides,
+  variables
 });
